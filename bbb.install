@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Big Blue Button - Enables universities and colleges to deliver a high-quality
+ * learning experience.
+ *
+ * @author
+ * Stefan Auditor <stefan.auditor@erdfisch.de>
+ */
+
+/**
+ * Implement hook_schema().
+ */
+function bbb_schema() {
+  $schema['bbb_meetings'] = array(
+    'description' => t('The meeting table'),
+    'fields' => array(
+      'nid' => array(
+        'description' => t('The primary node id'),
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => t('A name for the meeting'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'meetingID' => array(
+        'description' => t('A meeting ID that can be used to identify this meeting by the third party application'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'attendeePW' => array(
+        'description' => t('The password that will be required for attendees to join the meeting'),
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'moderatorPW' => array(
+        'description' => t('The password that will be required for moderators to join the meeting or for certain administrative actions'),
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'welcome' => array(
+        'description' => t('A welcome message that gets displayed on the chat window when the participant joins'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'dialNumber' => array(
+        'description' => t('The dial access number that participants can call in using regular phone'),
+        'type' => 'varchar',
+        'length' => '32',
+        'not null' => TRUE,
+      ),
+      'voiceBridge' => array(
+        'description' => t('Voice conference number that participants enter to join the voice conference.'),
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'logoutURL' => array(
+        'description' => t('The URL that the BigBlueButton client will go to after users logged out'),
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'record' => array(
+        'description' => t('A boolean to indicate whether or not the meeting will be recorded.'),
+        'type' => 'int',
+        'size' => 'tiny',
+        'default' => 0,
+        'not null' => TRUE,
+      ),
+      'initialized' => array(
+        'description' => t('Initialization timestamp'),
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'created' => array(
+        'description' => t('Meeting created timestamp'),
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+  return $schema;
+}
+
+/**
+ * Add a column to the bbb_meetings table for the recording option
+ */
+function bbb_update_7100() {
+  if (!db_field_exists('bbb_meetings', 'record')) {
+    $new_field = array(
+      'type' => 'int',
+      'default' => 0,
+      'size' => 'tiny',
+      'not null' => TRUE,
+      'description' => 'A boolean to indicate whether or not this meeting will be recorded.',
+    );
+    db_add_field('bbb_meetings', 'record', $new_field);
+  }
+}
+
+/**
+ * Implement hook_uninstall().
+ */
+function bbb_uninstall() {
+  // Remove variables
+  db_query("DELETE FROM {variable} WHERE name LIKE 'bbb_%'");
+}

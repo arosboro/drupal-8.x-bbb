@@ -1,0 +1,7 @@
+name: Big Blue Button
+type: module
+description: Enables universities and colleges to deliver a high-quality learning experience.
+package: Big Blue Button
+core: 8.x
+
+configure: bigbluebutton.admin
