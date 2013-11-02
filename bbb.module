@@ -132,15 +132,6 @@ define('BIGBLUEBUTTON_IS_MEETING_RUNNING_URL', '/api/isMeetingRunning');
 //    'type' => MENU_CALLBACK,
 //    'file' => 'includes/api.bbb.inc',
 //  );
-//  $items['admin/config/media/bigbluebutton'] = array(
-//    'title' => 'Big Blue Button meetings',
-//    'description' => 'Default server and meeting settings.',
-//    'page callback' => 'drupal_get_form',
-//    'page arguments' => array('bbb_settings'),
-//    'access arguments' => array('administer big blue button'),
-//    'type' => MENU_NORMAL_ITEM,
-//    'file' => 'includes/pages.bbb.inc',
-//  );
 //  return $items;
 //}
 //

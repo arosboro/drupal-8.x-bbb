@@ -1,0 +1,7 @@
+bbb.admin:
+  path: '/admin/config/media/bigbluebutton'
+  defaults:
+    _form: '\Drupal\bbb\Form\SettingsForm'
+    _title: 'Big Blue Button meetings'
+  requirements:
+    _permission: 'administer big blue button'

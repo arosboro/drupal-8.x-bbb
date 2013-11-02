@@ -4,4 +4,4 @@ description: Enables universities and colleges to deliver a high-quality learnin
 package: Big Blue Button
 core: 8.x
 
-configure: bigbluebutton.admin
+configure: bbb.admin
