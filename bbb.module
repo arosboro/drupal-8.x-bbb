@@ -78,11 +78,12 @@ define('BIGBLUEBUTTON_IS_MEETING_RUNNING_URL', '/api/isMeetingRunning');
 //    )
 //  );
 //}
-//
-///**
-// * Implement HOOK_menu().
-//function bbb_menu() {
-//  $items = array();
+
+/**
+ * Implement HOOK_menu().
+ */
+function bbb_menu() {
+  $items = array();
 //  $show_local_tasks = variable_get('bbb_local_tasks', 1);
 //  $items['node/%node/meeting/attend'] = array(
 //    'title' => 'Attend Meeting',
@@ -132,9 +133,17 @@ define('BIGBLUEBUTTON_IS_MEETING_RUNNING_URL', '/api/isMeetingRunning');
 //    'type' => MENU_CALLBACK,
 //    'file' => 'includes/api.bbb.inc',
 //  );
-//  return $items;
-//}
-//
+
+  $items['admin/config/media/bigbluebutton'] = array(
+    'title' => 'Big Blue Button meetings',
+    'description' => 'Default server and meeting settings.',
+    'route_name' => 'bbb.admin',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
 ///**
 // * Check attendance access permissions; Menu access callback
 //

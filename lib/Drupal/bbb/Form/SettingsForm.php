@@ -81,7 +81,7 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $settings['display_width'],
       '#suffix' => '</div>',
       '#size' => 4,
-      '#description' => '<br />' . t('Give dimensions for inline display, e.g. <em>520px</em> x <em>100%</em>.'),
+      '#description' => '<br />' . t('Give dimensions for inline display, e.g. <em>580px</em> x <em>100%</em>.'),
     );
 
     $form['connection'] = array(
