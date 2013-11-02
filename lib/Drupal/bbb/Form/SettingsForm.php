@@ -112,7 +112,6 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->configFactory->get('bbb.settings');
 
     $form_values = $form_state['values'];
-    dpm($form_state);
 
     $config
         ->set('security_salt', $form_values['bbb_server']['security_salt'])
