@@ -32,10 +32,6 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->configFactory->get('bbb.settings');
     $settings = $config->get();
 
-    $form['settings'] = array(
-      '#tree' => TRUE,
-    );
-
     $form['bbb_server'] = array(
       '#title' => 'Server settings',
       '#type' => 'fieldset',
@@ -113,14 +109,14 @@ class SettingsForm extends ConfigFormBase {
     // Get config factory
     $config = $this->configFactory->get('bbb.settings');
 
-    $form_values = $form_state['values']['settings'];
+    $form_values = $form_state['values'];
 
     $config
-        ->set('security_salt', $form_values['security_salt'])
-        ->set('base_url', $form_values['base_url'])
-        ->set('display_mode', $form_values['display_mode'])
-        ->set('display_height', $form_values['display_height'])
-        ->set('display_width', $form_values['display_width'])
+        ->set('security_salt', $form_values['bbb_server']['security_salt'])
+        ->set('base_url', $form_values['bbb_server']['base_url'])
+        ->set('display_mode', $form_values['bbb_client']['display_mode'])
+        ->set('display_height', $form_values['bbb_client']['display_height'])
+        ->set('display_width', $form_values['bbb_client']['display_width'])
         ->save();
 
     parent::submitForm($form, $form_state);
