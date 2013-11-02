@@ -1,0 +1,6 @@
+security_salt: '76b71974198f26ecc5a594eddddf49d1'
+base_url: 'http://example.com/bigbluebutton'
+display_mode: 'inline'
+display_height: '580px'
+display_width: '100%'
+local_tasks: 1
