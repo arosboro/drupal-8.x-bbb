@@ -104,7 +104,6 @@ class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
-   * Compares the submitted settings to the defaults and unsets any that are equal. This was we only store overrides.
    */
   public function submitForm(array &$form, array &$form_state) {
 
@@ -122,6 +121,5 @@ class SettingsForm extends ConfigFormBase {
         ->save();
 
     parent::submitForm($form, $form_state);
-
   }
 }

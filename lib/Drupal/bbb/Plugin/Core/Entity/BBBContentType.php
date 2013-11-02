@@ -17,12 +17,9 @@ use Drupal\Core\Annotation\Translation;
  *   id = "BBBContentType",
  *   label = @Translation("Big Blue Button Content Type"),
  *   module = "bbb",
- *   controller_class = "Drupal\bbb\BBBContentTypeStorageController",
- *   list_controller_class = "Drupal\bbb\BBBContentTypeListController",
  *   form_controller_class = {
- *     "default" = "Drupal\bbb\BBBContentTypeFormController"
+ *     "default" = "Drupal\bbb\Form\BBBContentTypeForm"
  *   },
- *   uri_callback = "bbb_content_type_uri",
  *   config_prefix = "bbb.content_type",
  *   entity_keys = {
  *     "id" = "id",
@@ -32,7 +29,7 @@ use Drupal\Core\Annotation\Translation;
  * )
  */
 class BBBContentType extends ConfigEntityBase {
-  public $node_type;
+  public $active;
   public $show_links;
   public $show_status;
   public $moderator_required;
