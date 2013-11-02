@@ -7,14 +7,14 @@
 
 namespace Drupal\bbb\Form;
 
-use Drupal\system\SystemConfigFormBase;
+use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Config\ConfigFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an administration settings form.
  */
-class SettingsForm extends SystemConfigFormBase {
+class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
