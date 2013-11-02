@@ -34,7 +34,7 @@ define('BIGBLUEBUTTON_IS_MEETING_RUNNING_URL', '/api/isMeetingRunning');
 //define('BIGBLUEBUTTON_DISPLAY_HEIGHT', variable_get('bbb_display_height', '580px'));
 //define('BIGBLUEBUTTON_DISPLAY_WIDTH',  variable_get('bbb_display_width', '100%'));
 
-//include_once(drupal_get_path('modules', 'bbb') . 'includes/api.bbb.inc');
+include_once(drupal_get_path('modules', 'bbb') . 'includes/api.bbb.inc');
 //
 ///* Drupal Hooks */
 //
@@ -47,92 +47,93 @@ define('BIGBLUEBUTTON_IS_MEETING_RUNNING_URL', '/api/isMeetingRunning');
 //    'path' => drupal_get_path('module', 'bbb') . '/includes',
 //  );
 //}
-//
-///**
-// * Implements HOOK_permission().
-//
-//function bbb_permission() {
-//  return array(
-//    'administer big blue button' => array(
-//      'title' => t('Administer BigBlueButton'),
-//      'description' => t('Allow administration of BigBlueButton')
-//    ),
-//  //TODO:
-//  //    'start meetings',
-//  //    'start own meetings',
-//    'moderate meetings' => array(
-//      'title' => t('Moderate meetings'),
-//      'description' => t('Allow moderation of meetings')
-//    ),
-//    'moderate own meetings' => array(
-//      'title' => t('Moderate own meetings'),
-//      'description' => t('Allow moderation of own meetings')
-//    ),
-//    'attend meetings' => array(
-//      'title' => t('Attend meetings'),
-//      'description' => t('Allow following meetings as an attendee')
-//    ),
-//    'record meetings' => array(
-//      'title' => t('Record meetings'),
-//      'description' => t('Allow the user to record meetings.')
-//    )
-//  );
-//}
+
+/**
+ * Implements HOOK_permission().
+ */
+function bbb_permission() {
+  return array(
+    'administer big blue button' => array(
+      'title' => t('Administer BigBlueButton'),
+      'restrict access' => TRUE,
+      'description' => t('Allow administration of BigBlueButton')
+    ),
+  //TODO:
+  //    'start meetings',
+  //    'start own meetings',
+    'moderate meetings' => array(
+      'title' => t('Moderate meetings'),
+      'description' => t('Allow moderation of meetings')
+    ),
+    'moderate own meetings' => array(
+      'title' => t('Moderate own meetings'),
+      'description' => t('Allow moderation of own meetings')
+    ),
+    'attend meetings' => array(
+      'title' => t('Attend meetings'),
+      'description' => t('Allow following meetings as an attendee')
+    ),
+    'record meetings' => array(
+      'title' => t('Record meetings'),
+      'description' => t('Allow the user to record meetings.')
+    )
+  );
+}
 
 /**
  * Implement HOOK_menu().
  */
 function bbb_menu() {
   $items = array();
-//  $show_local_tasks = variable_get('bbb_local_tasks', 1);
-//  $items['node/%node/meeting/attend'] = array(
-//    'title' => 'Attend Meeting',
-//    'page callback' => 'bbb_meeting_attend',
-//    'page arguments' => array(1),
-//    'access callback' => 'bbb_access_attendee',
-//    'access arguments' => array(1),
-//    'type' => $show_local_tasks ? MENU_LOCAL_TASK : MENU_CALLBACK,
-//    'weight' => 2,
-//  );
-//  $items['node/%node/meeting/moderate'] = array(
-//    'title' => 'Moderate Meeting',
-//    'page callback' => 'bbb_meeting_moderate',
-//    'page arguments' => array(1),
-//    'access callback' => 'bbb_access_moderator',
-//    'access arguments' => array(1),
-//    'type' => $show_local_tasks ? MENU_LOCAL_TASK : MENU_CALLBACK,
-//    'weight' => 2,
-//  );
-//  $items['node/%node/meeting/end-confirm'] = array(
-//    'title' => 'Terminate Meeting',
-//    'page callback' => 'drupal_get_form',
-//    'page arguments' => array('bbb_end_confirm_form', 1),
-//    'access callback' => 'bbb_access_moderator',
-//    'access arguments' => array(1),
-//    'type' => MENU_CALLBACK,
-//  );
-//  $items['node/%node/redirect/attend'] = array(
-//    'page callback' => 'bbb_redirect',
-//    'page arguments' => array(1, 3),
-//    'access callback' => 'bbb_access_attendee',
-//    'access arguments' => array(1),
-//    'type' => MENU_CALLBACK,
-//  );
-//  $items['node/%node/redirect/moderate'] = array(
-//    'page callback' => 'bbb_redirect',
-//    'page arguments' => array(1, 3),
-//    'access callback' => 'bbb_access_moderator',
-//    'access arguments' => array(1),
-//    'type' => MENU_CALLBACK,
-//  );
-//  $items['node/%node/meeting/status'] = array(
-//    'page callback' => 'bbb_status',
-//    'page arguments' => array(1),
-//    'access callback' => 'bbb_access_attendee',
-//    'access arguments' => array(1),
-//    'type' => MENU_CALLBACK,
-//    'file' => 'includes/api.bbb.inc',
-//  );
+  $show_local_tasks = \Drupal::config('bbb.settings')->get('local_tasks');
+  $items['node/%node/meeting/attend'] = array(
+    'title' => 'Attend Meeting',
+    'page callback' => 'bbb_meeting_attend',
+    'page arguments' => array(1),
+    'access callback' => 'bbb_access_attendee',
+    'access arguments' => array(1),
+    'type' => $show_local_tasks ? MENU_LOCAL_TASK : MENU_CALLBACK,
+    'weight' => 2,
+  );
+  $items['node/%node/meeting/moderate'] = array(
+    'title' => 'Moderate Meeting',
+    'page callback' => 'bbb_meeting_moderate',
+    'page arguments' => array(1),
+    'access callback' => 'bbb_access_moderator',
+    'access arguments' => array(1),
+    'type' => $show_local_tasks ? MENU_LOCAL_TASK : MENU_CALLBACK,
+    'weight' => 2,
+  );
+  $items['node/%node/meeting/end-confirm'] = array(
+    'title' => 'Terminate Meeting',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('bbb_end_confirm_form', 1),
+    'access callback' => 'bbb_access_moderator',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/redirect/attend'] = array(
+    'page callback' => 'bbb_redirect',
+    'page arguments' => array(1, 3),
+    'access callback' => 'bbb_access_attendee',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/redirect/moderate'] = array(
+    'page callback' => 'bbb_redirect',
+    'page arguments' => array(1, 3),
+    'access callback' => 'bbb_access_moderator',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+  );
+  $items['node/%node/meeting/status'] = array(
+    'page callback' => 'bbb_status',
+    'page arguments' => array(1),
+    'access callback' => 'bbb_access_attendee',
+    'access arguments' => array(1),
+    'type' => MENU_CALLBACK,
+    'file' => 'includes/api.bbb.inc',
+  );
 
   $items['admin/config/media/bigbluebutton'] = array(
     'title' => 'Big Blue Button meetings',
@@ -144,60 +145,62 @@ function bbb_menu() {
   return $items;
 }
 
-///**
-// * Check attendance access permissions; Menu access callback
-//
-//function bbb_access_attendee($node) {
-//  if (!bbb_is_meeting_type($node->type)) {
-//    return FALSE;
-//  }
-//
-//  // Check for node access and access to attend meetings
-//  if (node_access('view', $node) &&
-//      (user_access('attend meetings') || user_access('administer big blue button'))) {
-//    return TRUE;
-//  }
-//  return FALSE;
-//}
-//
-///**
-// * Check moderation access permissions; Menu access callback
-//function bbb_access_moderator($node) {
-//  global $user;
-//  if (!bbb_is_meeting_type($node->type)) {
-//    return FALSE;
-//  }
-//
-//  // Check for node access and access start meetings
-//  if (node_access('view', $node) && ((user_access('moderate meetings') || user_access('administer big blue button')) || $user->uid == $node->uid && user_access('moderate own meetings'))) {
-//    return TRUE;
-//  }
-//  return FALSE;
-//}
-//
-///**
-// * Check that the user is allowed to set meetings to record
-//function bbb_access_record($node) {
-//  if (!bbb_is_meeting_type($node->type)) {
-//    return FALSE;
-//  }
-//  // No bother to check for node access since this will be on edit/create pages.
-//  if (user_access('record meetings') || user_access('administer big blue button')) {
-//    return TRUE;
-//  }
-//  return FALSE;
-//}
-//
-///**
-// * Implements HOOK_block_info().
-//
-//function bbb_block_info() {
-//  $blocks['bbb_login_meeting'] = array(
-//    'info' => t('BBB Meeting details')
-//  );
-//  return $blocks;
-//}
-//
+/**
+ * Check attendance access permissions; Menu access callback
+ */
+function bbb_access_attendee($node) {
+  if (!bbb_is_meeting_type($node->type)) {
+    return FALSE;
+  }
+
+  // Check for node access and access to attend meetings
+  if (node_access('view', $node) &&
+      (user_access('attend meetings') || user_access('administer big blue button'))) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Check moderation access permissions; Menu access callback
+ */
+function bbb_access_moderator($node) {
+  global $user;
+  if (!bbb_is_meeting_type($node->type)) {
+    return FALSE;
+  }
+
+  // Check for node access and access start meetings
+  if (node_access('view', $node) && ((user_access('moderate meetings') || user_access('administer big blue button')) || $user->uid == $node->uid && user_access('moderate own meetings'))) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Check that the user is allowed to set meetings to record
+ */
+function bbb_access_record($node) {
+  if (!bbb_is_meeting_type($node->type)) {
+    return FALSE;
+  }
+  // No bother to check for node access since this will be on edit/create pages.
+  if (user_access('record meetings') || user_access('administer big blue button')) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements HOOK_block_info().
+
+function bbb_block_info() {
+  $blocks['bbb_login_meeting'] = array(
+    'info' => t('BBB Meeting details')
+  );
+  return $blocks;
+}
+
 ///**
 // * Implements HOOK_block_view().
 //
@@ -533,22 +536,22 @@ function bbb_menu() {
 //
 ///* Helper functions */
 //
-///**
-// * Check if user is meeting owner
-// */
-//function bbb_is_meeting_owner($nid, $account = NULL) {
-//  if (!$account) {
-//    global $user;
-//    $account = $user;
-//  }
-//  $sql = "SELECT COUNT(nid) FROM {bbb_meetings} bm
-//           INNER JOIN {node} n ON bm.nid = n.nid
-//           WHERE n.uid = :uid
-//             AND nid = :nid";
-//  $owner = db_result(db_query($sql, array(':uid' => $account->uid, ':nid' => $nid)));
-//  return $owner ? TRUE : FALSE;
-//}
-//
+/**
+ * Check if user is meeting owner
+ */
+function bbb_is_meeting_owner($nid, $account = NULL) {
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
+  $sql = "SELECT COUNT(nid) FROM {bbb_meetings} bm
+           INNER JOIN {node} n ON bm.nid = n.nid
+           WHERE n.uid = :uid
+             AND nid = :nid";
+  $owner = db_result(db_query($sql, array(':uid' => $account->uid, ':nid' => $nid)));
+  return $owner ? TRUE : FALSE;
+}
+
 ///**
 // * Check if node type is meeting
 // */
@@ -556,318 +559,317 @@ function bbb_menu() {
 //  return variable_get('bbb_content_type_' . $type, FALSE);
 //}
 //
-///**
-// * Return a meeting object
-// */
-//function bbb_get_meeting($nid, $account = NULL, $cached = TRUE) {
-//  // Simple static cache
-//  static $meetings = array();
-//  if (!$account) {
-//    global $user;
-//    $account = $user;
-//  }
-//
-//  if (!isset($meetings[$nid]) || !$cached) {
-//    $meeting = new stdClass();
-//    $result = db_query("SELECT * FROM {bbb_meetings} WHERE nid = :nid", array(':nid' => $nid));
-//    $meeting = $result->fetchObject();
-//    if ($meeting) {
-//      $meeting->running = bbb_api_isMeetingRunning(array('meetingID' => $meeting->meetingID));
-//      // insert the recording option
-//      $recording = ($meeting->record == 1) ? array('record' => 'true') : array();
-//      $attend = array(
-//            'fullName' => property_exists($account,'name') ? $account->name : t('Anonymous'),
-//            'meetingID' => $meeting->meetingID,
-//            'password' => $meeting->attendeePW,
-//          );
-//      $moderate = array(
-//            'fullName' => property_exists($account,'name') ? $account->name : t('Anonymous'),
-//            'meetingID' => $meeting->meetingID,
-//            'password' => $meeting->moderatorPW,
-//          );
-//      $attend = array_merge($attend, $recording);
-//      $moderate = array_merge($moderate, $recording);
-//      $meeting->url = array(
-//        'attend' => bbb_api_join($attend),
-//        'moderate' => bbb_api_join($moderate),
-//      );
-//      // Allow alteration for e.g. access control
-//      // Just implement hook_bbb_meeting_alter(&$data) {} in your module
-//      drupal_alter('bbb_meeting', $meeting);
-//      // Static cache
-//      $meetings[$nid] = $meeting;
-//    }
-//  }
-//  return isset($meetings[$nid]) ? $meetings[$nid] : FALSE;
-//}
-//
-///**
-// * Init meeting
-// */
-//function bbb_init_meeting($node = NULL, $params = array()) {
-//  $welcome     = variable_get('bbb_content_type_welcome_' . $node->type, '');
-//  $dialNumber  = variable_get('bbb_content_type_dialNumber_' . $node->type, '');
-//  $moderatorPW = variable_get('bbb_content_type_moderatorPW_' . $node->type, '');
-//  $attendeePW  = variable_get('bbb_content_type_attendeePW_' . $node->type, '');
-//  $logoutURL   = variable_get('bbb_content_type_logoutURL_' . $node->type, '');
-//  $default_rec = variable_get('bbb_content_type_record_' . $node->type, '');
-//  if (isset($node->bbb)) {
-//    $record = (array) $node->bbb;
-//    $record = empty($record['record']) ? $default_rec : 1;
-//  }
-//
-//  $settings = array(
-//    'nid'          => $node->nid,
-//    'name'         => $node->title,
-//    'meetingID'    => bbb_create_meeting_id($node->nid),
-//    'attendeePW'   => !empty($attendeePW) ? $attendeePW : user_password(),
-//    'moderatorPW'  => !empty($moderatorPW) ? $moderatorPW : user_password(),
-//    'welcome'      => !empty($welcome) ? $welcome : t('Welcome to @title', array('@title' => $node->title)),
-//    'dialNumber'   => $dialNumber  ? $dialNumber  : NULL,
-//    // TODO: This is limited to 90000 voice bridges and may
-//    // collide sooner, as rand() may return x twice in a row
-//    'voiceBridge'  => rand(10000, 99999),
-//    'logoutURL'    => $logoutURL, //TODO: make absolute, as soon as supported
-//    'record'       => $record,
-//    'initialized'  => 0,
-//    'created'      => time(),
-//  );
-//  $params = array_merge($params, $settings);
-//  return $params;
-//}
-//
-///**
-// * Update meeting
-// */
-//function bbb_update_meeting($node, $params = array()) {
-//  $params += bbb_init_meeting($node, $params);
-//  return drupal_write_record('bbb_meetings', $params, 'nid');
-//}
-//
-///**
-// * Create meeting
-// */
-//function bbb_create_meeting($node, $params = array()) {
-//  $params += bbb_init_meeting($node, $params);
-//  // we need to change the "record" param (0 or 1 in the database), to "true" if 1
-//
-//  if ($params['record'] == 1) {
-//    $params['record'] = 'true';
-//  } else {
-//    unset($params['record']);
-//  }
-//  if ($data = bbb_api_create($params)) {
-//    return $data;
-//  }
-//  return FALSE;
-//}
-//
-///**
-// * Store meeting
-// */
-//function bbb_store_meeting($node, $params = array()) {
-//  $params += bbb_init_meeting($node, $params);
-//  return drupal_write_record('bbb_meetings', $params);
-//}
-//
-///**
-// * Delete meeting
-// */
-//function bbb_delete_meeting($nid) {
-//  return db_query("DELETE FROM {bbb_meetings} WHERE nid = :nid", array(':nid' => $nid));
-//}
-//
-///* Menu Callbacks */
-//
-///**
-// * Return meeting status; Menu callback
-// */
-//function bbb_status($node) {
-//  $meeting = bbb_get_meeting($node->nid);
-//  drupal_json_output(array('running' => $meeting->running));
-//  die();
-//}
-//
-///**
-// * Redirect to big blue button instance; Menu callback
-// *
-// * @param OBJECT $node
-// *   A Drupal node object
-// */
-//function bbb_meeting_attend($node) {
-//  global $user;
-//  $url = array();
-//  $mode = 'attend';
-//  $meeting = bbb_get_meeting($node->nid);
-//  $params = array(
-//    'meetingID' => $meeting->meetingID,
-//    'password' => $meeting->attendeePW,
-//  );
-//
-//  $status = bbb_api_getMeetingInfo($params);
-//  if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
-//    drupal_set_message('The meeting has been terminated and is not available for attending.');
-//    drupal_goto('node/' . $node->nid);
-//  }
-//
-//  drupal_set_title($node->title);
-//  if ($meeting->running) {
-//    if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
-//      bbb_redirect($node, $mode);
-//    }
-//  }
-//  else {
-//    if (variable_get('bbb_content_type_moderator_required_' . $node->type, FALSE)) {
-//      drupal_add_js('var bbb_check_status_url = ' . drupal_json_encode(url('node/' . $node->nid . '/meeting/status')), 'inline');
-//      drupal_add_js(drupal_get_path('module', 'bbb') . '/js/check_status.bbb.js');
-//      drupal_set_message(t('You signed up for this meeting. Please stay on this page, you will be redirected immediately after the meeting has started.'));
-//      return node_show($node, NULL);
-//    }
-//    else {
-//      if (empty($meeting->initialized)) {
-//        if ($data = bbb_create_meeting($node, (array) $params)) {
-//          // Update local data
-//          bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
-//        }
-//      }
-//      if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
-//        bbb_redirect($node, $mode);
-//      }
-//    }
-//  }
-//  $variables = array(
-//    'meeting' => $meeting,
-//    'mode' => $mode,
-//    'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
-//    'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
-//  );
-//  return theme('bbb_meeting', $variables);
-//}
-//
-///**
-// * Redirect to big blue button instance; Menu callback
-// *
-// * @param OBJECT $node
-// *   A Drupal node object
-// */
-//function bbb_meeting_moderate($node) {
-//  global $user;
-//  $url = array();
-//  $mode = 'moderate';
-//  $meeting = bbb_get_meeting($node->nid);
-//
-//  $params = array(
-//    'meetingID' => $meeting->meetingID,
-//    'password' => $meeting->moderatorPW,
-//  );
-//
-//  $status = bbb_api_getMeetingInfo($params);
-//  if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
-//    drupal_set_message('The meeting has been terminated and is not available for reopening.');
-//    drupal_goto('node/' . $node->nid);
-//  }
-//
-//  drupal_set_title($node->title);
-//  // Implicitly create meeting
-//  if (empty($meeting->initialized)) {
-//    if ($data = bbb_create_meeting($node, (array) $params)) {
-//      // Update local data
-//      bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
-//    }
-//  }
-//  if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
-//    bbb_redirect($node, $mode);
-//  }
-//  $variables = array(
-//    'meeting' => $meeting,
-//    'mode' => $mode,
-//    'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
-//    'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
-//  );
-//  return theme('bbb_meeting', $variables);
-//}
-//
-///**
-// * Terminate confirm form
-// */
-//function bbb_end_confirm_form($form, &$form_state) {
-//    $node = node_load(arg(1));
-//    return confirm_form(
-//    array(
-//      'nid' => array(
-//        '#type' => 'value',
-//        '#value' => $node->nid,
-//      ),
-//    ),
-//    t('Are you sure you want to terminate the meeting !name?', array('!name' => $node->title)),
-//    'node/' . $node->nid,
-//    t('This action cannot be undone, all attendes will be removed from the meeting.'),
-//    t('Terminate'),
-//    t('Cancel')
-//  );
-//}
-//
-//function bbb_end_confirm_form_submit($form, &$form_state) {
-//  $node = node_load($form_state['values']['nid']);
-//  $request = bbb_meeting_end($node);
-//
-//  if ($request === FALSE) {
-//    drupal_set_message(t('There was an error terminating the meeting.'), 'error');
-//  } else {
-//    drupal_set_message(t('The meeting has been terminated.'));
-//  }
-//  drupal_goto('node/' . $node->nid);
-//}
-//
-///**
-// * Redirect to big blue button instance; Menu callback
-// *
-// * @param OBJECT $node
-// *   A Drupal node object
-// */
-//function bbb_meeting_end($node) {
-//  $meeting = bbb_get_meeting($node->nid);
-//  $params = array(
-//    'meetingID' => $meeting->meetingID,
-//    'password' => $meeting->moderatorPW,
-//  );
-//  $request = bbb_api_endMeeting($params);
-//  return $request;
-//}
-//
-///**
-// * Redirect to meeting
-// */
-//function bbb_redirect($node, $mode = 'attend') {
-//  $meeting = bbb_get_meeting($node->nid, NULL, FALSE);
-//  switch ($mode) {
-//    case 'attend':
-//      // Get redirect URL
-//      $url = parse_url($meeting->url[$mode]);
-//      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-//      header('Location: ' . $fullurl, TRUE, 301);
-//      break;
-//    case 'moderate':
-//      // Get redirect URL
-//      $url = parse_url($meeting->url[$mode]);
-//      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-//      header('Location: ' . $fullurl, TRUE, 301);
-//      break;
-//  }
-//}
-//
-//function bbb_encode_int($string) {
-//  $ords = array();
-//  for ($i = 0; $i < drupal_strlen($string); $i++) {
-//    $ords[] = ord(drupal_substr($string, $i , 1));
-//  }
-//  return implode($ords);
-//}
-//
-//function bbb_create_meeting_id($salt = NULL) {
-//  $private_key = drupal_get_private_key();
-//  return bbb_encode_int($private_key) . $salt;
-//}
+/**
+ * Return a meeting object
+ */
+function bbb_get_meeting($nid, $account = NULL, $cached = TRUE) {
+  // Simple static cache
+  static $meetings = array();
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
+
+  if (!isset($meetings[$nid]) || !$cached) {
+    $result = db_query("SELECT * FROM {bbb_meetings} WHERE nid = :nid", array(':nid' => $nid));
+    $meeting = $result->fetchObject();
+    if ($meeting) {
+      $meeting->running = bbb_api_isMeetingRunning(array('meetingID' => $meeting->meetingID));
+      // insert the recording option
+      $recording = ($meeting->record == 1) ? array('record' => 'true') : array();
+      $attend = array(
+            'fullName' => property_exists($account,'name') ? $account->name : t('Anonymous'),
+            'meetingID' => $meeting->meetingID,
+            'password' => $meeting->attendeePW,
+          );
+      $moderate = array(
+            'fullName' => property_exists($account,'name') ? $account->name : t('Anonymous'),
+            'meetingID' => $meeting->meetingID,
+            'password' => $meeting->moderatorPW,
+          );
+      $attend = array_merge($attend, $recording);
+      $moderate = array_merge($moderate, $recording);
+      $meeting->url = array(
+        'attend' => bbb_api_join($attend),
+        'moderate' => bbb_api_join($moderate),
+      );
+      // Allow alteration for e.g. access control
+      // Just implement hook_bbb_meeting_alter(&$data) {} in your module
+      drupal_alter('bbb_meeting', $meeting);
+      // Static cache
+      $meetings[$nid] = $meeting;
+    }
+  }
+  return isset($meetings[$nid]) ? $meetings[$nid] : FALSE;
+}
+
+/**
+ * Init meeting
+ */
+function bbb_init_meeting($node = NULL, $params = array()) {
+  $welcome     = variable_get('bbb_content_type_welcome_' . $node->type, '');
+  $dialNumber  = variable_get('bbb_content_type_dialNumber_' . $node->type, '');
+  $moderatorPW = variable_get('bbb_content_type_moderatorPW_' . $node->type, '');
+  $attendeePW  = variable_get('bbb_content_type_attendeePW_' . $node->type, '');
+  $logoutURL   = variable_get('bbb_content_type_logoutURL_' . $node->type, '');
+  $default_rec = variable_get('bbb_content_type_record_' . $node->type, '');
+  if (isset($node->bbb)) {
+    $record = (array) $node->bbb;
+    $record = empty($record['record']) ? $default_rec : 1;
+  }
+
+  $settings = array(
+    'nid'          => $node->nid,
+    'name'         => $node->title,
+    'meetingID'    => bbb_create_meeting_id($node->nid),
+    'attendeePW'   => !empty($attendeePW) ? $attendeePW : user_password(),
+    'moderatorPW'  => !empty($moderatorPW) ? $moderatorPW : user_password(),
+    'welcome'      => !empty($welcome) ? $welcome : t('Welcome to @title', array('@title' => $node->title)),
+    'dialNumber'   => $dialNumber  ? $dialNumber  : NULL,
+    // TODO: This is limited to 90000 voice bridges and may
+    // collide sooner, as rand() may return x twice in a row
+    'voiceBridge'  => rand(10000, 99999),
+    'logoutURL'    => $logoutURL, //TODO: make absolute, as soon as supported
+    'record'       => $record,
+    'initialized'  => 0,
+    'created'      => time(),
+  );
+  $params = array_merge($params, $settings);
+  return $params;
+}
+
+/**
+ * Update meeting
+ */
+function bbb_update_meeting($node, $params = array()) {
+  $params += bbb_init_meeting($node, $params);
+  return drupal_write_record('bbb_meetings', $params, 'nid');
+}
+
+/**
+ * Create meeting
+ */
+function bbb_create_meeting($node, $params = array()) {
+  $params += bbb_init_meeting($node, $params);
+  // we need to change the "record" param (0 or 1 in the database), to "true" if 1
+
+  if ($params['record'] == 1) {
+    $params['record'] = 'true';
+  } else {
+    unset($params['record']);
+  }
+  if ($data = bbb_api_create($params)) {
+    return $data;
+  }
+  return FALSE;
+}
+
+/**
+ * Store meeting
+ */
+function bbb_store_meeting($node, $params = array()) {
+  $params += bbb_init_meeting($node, $params);
+  return drupal_write_record('bbb_meetings', $params);
+}
+
+/**
+ * Delete meeting
+ */
+function bbb_delete_meeting($nid) {
+  return db_query("DELETE FROM {bbb_meetings} WHERE nid = :nid", array(':nid' => $nid));
+}
+
+/* Menu Callbacks */
+
+/**
+ * Return meeting status; Menu callback
+ */
+function bbb_status($node) {
+  $meeting = bbb_get_meeting($node->nid);
+  drupal_json_output(array('running' => $meeting->running));
+  die();
+}
+
+/**
+ * Redirect to big blue button instance; Menu callback
+ *
+ * @param OBJECT $node
+ *   A Drupal node object
+ */
+function bbb_meeting_attend($node) {
+  global $user;
+  $url = array();
+  $mode = 'attend';
+  $meeting = bbb_get_meeting($node->nid);
+  $params = array(
+    'meetingID' => $meeting->meetingID,
+    'password' => $meeting->attendeePW,
+  );
+
+  $status = bbb_api_getMeetingInfo($params);
+  if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
+    drupal_set_message('The meeting has been terminated and is not available for attending.');
+    drupal_goto('node/' . $node->nid);
+  }
+
+  drupal_set_title($node->title);
+  if ($meeting->running) {
+    if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
+      bbb_redirect($node, $mode);
+    }
+  }
+  else {
+    if (variable_get('bbb_content_type_moderator_required_' . $node->type, FALSE)) {
+      drupal_add_js('var bbb_check_status_url = ' . drupal_json_encode(url('node/' . $node->nid . '/meeting/status')), 'inline');
+      drupal_add_js(drupal_get_path('module', 'bbb') . '/js/check_status.bbb.js');
+      drupal_set_message(t('You signed up for this meeting. Please stay on this page, you will be redirected immediately after the meeting has started.'));
+      return node_show($node, NULL);
+    }
+    else {
+      if (empty($meeting->initialized)) {
+        if ($data = bbb_create_meeting($node, (array) $params)) {
+          // Update local data
+          bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
+        }
+      }
+      if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
+        bbb_redirect($node, $mode);
+      }
+    }
+  }
+  $variables = array(
+    'meeting' => $meeting,
+    'mode' => $mode,
+    'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
+    'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
+  );
+  return theme('bbb_meeting', $variables);
+}
+
+/**
+ * Redirect to big blue button instance; Menu callback
+ *
+ * @param OBJECT $node
+ *   A Drupal node object
+ */
+function bbb_meeting_moderate($node) {
+  global $user;
+  $url = array();
+  $mode = 'moderate';
+  $meeting = bbb_get_meeting($node->nid);
+
+  $params = array(
+    'meetingID' => $meeting->meetingID,
+    'password' => $meeting->moderatorPW,
+  );
+
+  $status = bbb_api_getMeetingInfo($params);
+  if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
+    drupal_set_message('The meeting has been terminated and is not available for reopening.');
+    drupal_goto('node/' . $node->nid);
+  }
+
+  drupal_set_title($node->title);
+  // Implicitly create meeting
+  if (empty($meeting->initialized)) {
+    if ($data = bbb_create_meeting($node, (array) $params)) {
+      // Update local data
+      bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
+    }
+  }
+  if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
+    bbb_redirect($node, $mode);
+  }
+  $variables = array(
+    'meeting' => $meeting,
+    'mode' => $mode,
+    'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
+    'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
+  );
+  return theme('bbb_meeting', $variables);
+}
+
+/**
+ * Terminate confirm form
+ */
+function bbb_end_confirm_form($form, &$form_state) {
+    $node = node_load(arg(1));
+    return confirm_form(
+    array(
+      'nid' => array(
+        '#type' => 'value',
+        '#value' => $node->nid,
+      ),
+    ),
+    t('Are you sure you want to terminate the meeting !name?', array('!name' => $node->title)),
+    'node/' . $node->nid,
+    t('This action cannot be undone, all attendes will be removed from the meeting.'),
+    t('Terminate'),
+    t('Cancel')
+  );
+}
+
+function bbb_end_confirm_form_submit($form, &$form_state) {
+  $node = node_load($form_state['values']['nid']);
+  $request = bbb_meeting_end($node);
+
+  if ($request === FALSE) {
+    drupal_set_message(t('There was an error terminating the meeting.'), 'error');
+  } else {
+    drupal_set_message(t('The meeting has been terminated.'));
+  }
+  drupal_goto('node/' . $node->nid);
+}
+
+/**
+ * Redirect to big blue button instance; Menu callback
+ *
+ * @param OBJECT $node
+ *   A Drupal node object
+ */
+function bbb_meeting_end($node) {
+  $meeting = bbb_get_meeting($node->nid);
+  $params = array(
+    'meetingID' => $meeting->meetingID,
+    'password' => $meeting->moderatorPW,
+  );
+  $request = bbb_api_endMeeting($params);
+  return $request;
+}
+
+/**
+ * Redirect to meeting
+ */
+function bbb_redirect($node, $mode = 'attend') {
+  $meeting = bbb_get_meeting($node->nid, NULL, FALSE);
+  switch ($mode) {
+    case 'attend':
+      // Get redirect URL
+      $url = parse_url($meeting->url[$mode]);
+      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
+      header('Location: ' . $fullurl, TRUE, 301);
+      break;
+    case 'moderate':
+      // Get redirect URL
+      $url = parse_url($meeting->url[$mode]);
+      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
+      header('Location: ' . $fullurl, TRUE, 301);
+      break;
+  }
+}
+
+function bbb_encode_int($string) {
+  $ords = array();
+  for ($i = 0; $i < drupal_strlen($string); $i++) {
+    $ords[] = ord(drupal_substr($string, $i , 1));
+  }
+  return implode($ords);
+}
+
+function bbb_create_meeting_id($salt = NULL) {
+  $private_key = drupal_get_private_key();
+  return bbb_encode_int($private_key) . $salt;
+}
 //
 ///* Themeables */
 //
