@@ -35,6 +35,7 @@ class SettingsForm extends ConfigFormBase {
     $form['bbb_server'] = array(
       '#title' => 'Server settings',
       '#type' => 'fieldset',
+      '#tree' => TRUE,
       '#description' => t('Read more about BigBlueButton on !home. See the documentation for !documentation', array('!home' => l(t('BigBlueButton.org'), 'http://bigbluebutton.org/'), '!documentation' => l(t('installation instructions'), 'http://code.google.com/p/bigbluebutton/'))),
     );
 
@@ -54,6 +55,7 @@ class SettingsForm extends ConfigFormBase {
     $form['bbb_client'] = array(
       '#title' => t('Client settings'),
       '#type' => 'fieldset',
+      '#tree' => TRUE,
     );
 
     $form['bbb_client']['display_mode'] = array(
