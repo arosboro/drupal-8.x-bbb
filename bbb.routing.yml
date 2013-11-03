@@ -5,3 +5,11 @@ bbb.admin:
     _title: 'Big Blue Button meetings'
   requirements:
     _permission: 'administer big blue button'
+
+bbb.content_type_form:
+  path: '/bbb_content_type_form'
+  defaults:
+    _title: 'BBB Content Type Settings'
+    _form: '\Drupal\bbb\Form\BBBContentTypeForm'
+  requirements:
+    _permission: 'administer big blue button'
