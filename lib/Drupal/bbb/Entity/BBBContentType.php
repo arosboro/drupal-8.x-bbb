@@ -12,11 +12,12 @@ use Drupal\bbb\BBBContentTypeInterface;
 /**
  * Defines the BBBContentType entity.
  *
- *  @Plugin(
+ *  @EntityType(
  *    id = "bbb_content_type",
  *    label = @Translation("Big Blue Button Content Type"),
  *    module = "bbb",
  *    controllers = {
+ *      "storage" = "Drupal\Core\Config\Entity\ConfigStorageController",
  *      "form" = {
  *        "edit" = "Drupal\bbb\Form\BBBContentTypeFormController"
  *      }

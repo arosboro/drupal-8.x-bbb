@@ -7,9 +7,9 @@ bbb.admin:
     _permission: 'administer big blue button'
 
 bbb.content_type_form:
-  path: '/bbb_content_type_form'
+  path: '/bbb_content_type_form/{node_type}'
   defaults:
-    _form: '\Drupal\bbb\Form\BBBContentTypeForm'
+    _form: 'bbb.content_type.edit'
     _title: 'BBB Content Type Settings'
   requirements:
     _permission: 'administer big blue button'
