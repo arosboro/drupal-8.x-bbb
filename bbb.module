@@ -197,8 +197,7 @@ function bbb_access_record($node) {
 function bbb_form_alter(&$form, &$form_state, $form_id) {
   // Node type settings form
   if ($form_id == 'node_type_edit_form') {
-    $bbbContentTypeForm = new BBBContentTypeForm();
-    $form['bbb'] = $bbbContentTypeForm.buildForm();
+    $form['bbb'] = \Drupal::formBuilder()->getForm('bbb_content_type');
   }
 
   // Node edit form
