@@ -20,6 +20,7 @@ class BBBContentTypeForm extends EntityFormController {
    * {@inheritdoc}
    */
   public function getFormID() {
+    dpm('hello');
     return 'bbb_content_type';
   }
 
