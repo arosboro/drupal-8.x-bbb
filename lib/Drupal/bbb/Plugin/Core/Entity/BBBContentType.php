@@ -18,7 +18,7 @@ use Drupal\Core\Annotation\Translation;
  *   label = @Translation("Big Blue Button Content Type"),
  *   module = "bbb",
  *   form_controller_class = {
- *     "default" = "Drupal\bbb\Form\BBBContentTypeForm"
+ *     "default" = "Drupal\bbb\Form\BBBContentTypeFormController"
  *   },
  *   config_prefix = "bbb.content_type",
  *   entity_keys = {

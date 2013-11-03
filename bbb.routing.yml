@@ -9,7 +9,7 @@ bbb.admin:
 bbb.content_type_form:
   path: '/bbb_content_type_form'
   defaults:
-    _title: 'BBB Content Type Settings'
     _form: '\Drupal\bbb\Form\BBBContentTypeForm'
+    _title: 'BBB Content Type Settings'
   requirements:
     _permission: 'administer big blue button'

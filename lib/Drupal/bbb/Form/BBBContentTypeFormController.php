@@ -7,20 +7,18 @@
 
 namespace Drupal\bbb\Form;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormController;
-use Drupal\Core\Config\ConfigFactory;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides an administration settings form.
  */
-class BBBContentTypeForm extends EntityFormController {
+class BBBContentTypeFormController extends EntityFormController {
 
   /**
    * {@inheritdoc}
    */
   public function getFormID() {
-    dpm('hello');
     return 'bbb_content_type';
   }
 
@@ -28,9 +26,8 @@ class BBBContentTypeForm extends EntityFormController {
    * {@inheritdoc}
    */
   public function buildForm(array $form, array &$form_state) {
-    // Get all settings
-    $config = $this->configFactory->get('bbb.content_type');
-    $settings = $config->get();
+    $form = parent::form($form, $form_state);
+    $bbbContentType = $this->entity;
 
     $form['bbb'] = array(
       '#title' => t('Big Blue Button settings'),
@@ -44,31 +41,31 @@ class BBBContentTypeForm extends EntityFormController {
     $form['bbb']['active'] = array(
       '#type' => 'checkbox',
       '#title' => t('Treat this node type as meeting'),
-      '#default_value' => $settings['active'],
+      '#default_value' => $bbbContentType->active(),
     );
 
     $form['bbb']['show_links'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show links to attend, moderate or terminate a meeting beneath the node'),
-      '#default_value' => $settings['show_links'],
+      '#default_value' => $bbbContentType->show_links(),
     );
 
     $form['bbb']['show_status'] = array(
       '#type' => 'checkbox',
       '#title' => t('Display meeting status on node'),
-      '#default_value' => $settings['show_status'],
+      '#default_value' => $bbbContentType->show_status(),
     );
 
     $form['bbb']['moderator_required'] = array(
       '#type' => 'checkbox',
       '#title' => t('Require a moderator present to run the meeting.'),
-      '#default_value' => $settings['moderator_required'],
+      '#default_value' => $bbbContentType->moderator_required(),
     );
 
     $form['bbb']['welcome'] = array(
       '#title' => t('Welcome message'),
       '#type' => 'textfield',
-      '#default_value' => $settings['welcome'],
+      '#default_value' => $bbbContentType->welcome(),
       '#maxlength' => 255,
       '#description' => t('A welcome message that gets displayed on the chat window when the participant joins. You can include keywords (%%CONFNAME%%, %%DIALNUM%%, %%CONFNUM%%) which will be substituted automatically.'),
     );
@@ -76,7 +73,7 @@ class BBBContentTypeForm extends EntityFormController {
     $form['bbb']['dialNumber'] = array(
       '#title' => t('Dial number'),
       '#type' => 'textfield',
-      '#default_value' => $settings['dialNumber'],
+      '#default_value' => $bbbContentType->dialNumber(),
       '#maxlength' => 32,
       '#description' => t('The dial access number that participants can call in using regular phone.'),
     );
@@ -84,7 +81,7 @@ class BBBContentTypeForm extends EntityFormController {
     $form['bbb']['moderatorPW'] = array(
       '#title' => t('Moderator password'),
       '#type' => 'textfield',
-      '#default_value' => $settings['moderatorPW'],
+      '#default_value' => $bbbContentType->moderatorPW(),
       '#maxlength' => 32,
       '#description' => t('The password that will be required for moderators to join the meeting or for certain administrative actions (i.e. ending a meeting).'),
     );
@@ -92,7 +89,7 @@ class BBBContentTypeForm extends EntityFormController {
     $form['bbb']['attendeePW'] = array(
       '#title' => t('Attendee password'),
       '#type' => 'textfield',
-      '#default_value' => $settings['attendeePW'],
+      '#default_value' => $bbbContentType->attendeePW(),
       '#maxlength' => 32,
       '#description' => t('The password that will be required for attendees to join the meeting.'),
     );
@@ -100,7 +97,7 @@ class BBBContentTypeForm extends EntityFormController {
     $form['bbb']['logoutURL'] = array(
       '#title' => t('Logout URL'),
       '#type' => 'textfield',
-      '#default_value' => $settings['logoutURL'],
+      '#default_value' => $bbbContentType->logoutURL(),
       '#maxlength' => 255,
       '#description' => t('The URL that the Big Blue Button client will go to after users click the OK button on the <em>You have been logged out message</em>.'),
     );
@@ -109,13 +106,13 @@ class BBBContentTypeForm extends EntityFormController {
       $form['bbb']['record'] = array(
         '#title' => t('Record new meetings of this type, by default.'),
         '#type' => 'checkbox',
-        '#default_value' => $settings['record'],
+        '#default_value' => $bbbContentType->record(),
         '#description' => 'Meetings that are recorded can be viewed at <strong>http://example.com/playback/slides/playback.html?meetingId=<meetingId></strong> (The meeting ID is about 54 characters long.)',
         '#weight' => -1,
       );
     }
 
-    return parent::buildForm($form, $form_state);
+    return $form;
   }
 
   /**
@@ -123,29 +120,8 @@ class BBBContentTypeForm extends EntityFormController {
    */
   public function save(array $form, array &$form_state) {
 
-    $bbbContentType = $this->getEntity($form_state);
+    $bbbContentType = $this->entity;
     $bbbContentType->save();
     dpm($bbbContentType, 'BBBContentType');
-
-    parent::save($form, $form_state);
-
-    /*
-    $form_values = $form_state['values']['bbb'];
-
-    $config
-        ->set('active', $form_values['active'])
-        ->set('show_links', $form_values['show_links'])
-        ->set('show_status', $form_values['show_status'])
-        ->set('moderator_required', $form_values['moderator_required'])
-        ->set('welcome', $form_values['welcome'])
-        ->set('dialNumber', $form_values['dialNumber'])
-        ->set('moderatorPW', $form_values['moderatorPW'])
-        ->set('attendeePW', $form_values['attendeePW'])
-        ->set('logoutURL', $form_values['logoutURL'])
-        ->set('record', $form_values['record'])
-        ->save();
-
-    parent::submitForm($form, $form_state);
-    */
   }
 }
