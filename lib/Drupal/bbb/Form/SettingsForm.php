@@ -129,13 +129,12 @@ class SettingsForm extends ConfigFormBase {
     try {
       $request = \Drupal::service('http_default_client')
         ->get($url);
-      $response = $request->send()
-        ->getBody(TRUE);
+      $response = $request->send();
     }
-    catch (RequestException $e) {
+    catch (\Exception $e) {
       return FALSE;
     }
-    if ($response->code == 200 || $response->code == 302) {
+    if ($response->getStatusCode() == 200 || $response->getStatusCode() == 302) {
       return TRUE;
     }
     return FALSE;
