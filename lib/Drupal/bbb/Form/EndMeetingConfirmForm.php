@@ -36,8 +36,8 @@ class EndMeetingConfirmForm extends ConfigFormBase {
           '#value' => $node->id(),
         ),
       ),
-      t('Are you sure you want to terminate the meeting !name?', array('!name' => l($node->getTitle())),
-        'node/' . $node->id()),
+      t('Are you sure you want to terminate the meeting !name?', array('!name' => $node->getTitle())), 
+      'node/' . $node->id(),
       t('This action cannot be undone, all attendes will be removed from the meeting.'),
       t('Terminate'),
       t('Cancel')
