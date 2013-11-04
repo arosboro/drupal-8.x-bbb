@@ -27,7 +27,11 @@ bbb.node_type.edit:
   requirements:
     _permission: 'administer big blue button'
 bbb.meeting.attend:
-  path: 'node/{node_type}/meeting/attend'
+  path: 'node/{node}/meeting/attend'
   defaults:
-    _content: '\Drupal\bbb\Controller\BBBMeetingController'
+    _content: '\Drupal\bbb\Controller\BBBMeetingController::attend'
+  options:
+    _access_mode: 'ALL'
   requirements:
+    _bbb_meeting_attendee_access_check: 'TRUE'
+    _entity_access: 'node.view'

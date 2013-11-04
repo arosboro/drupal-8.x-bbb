@@ -1,0 +1,6 @@
+services:
+  bbb.meeting.attendee_access_check
+    class: Drupal\bbb\Access\BBBMeetingAttendeeAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check }
