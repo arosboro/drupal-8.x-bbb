@@ -35,7 +35,7 @@ bbb.meeting.attend:
   requirements:
     _bbb_meeting_attendee_access_check: 'TRUE'
     _entity_access: 'node.view'
-bbb.meeting.attend:
+bbb.meeting.moderate:
   path: 'node/{node}/meeting/moderate'
   defaults:
     _content: '\Drupal\bbb\Controller\BBBMeetingTypeController::moderate'
@@ -55,7 +55,7 @@ bbb.meeting.redirect.attend:
     _bbb_meeting_attendee_access_check: 'TRUE'
     _entity_access: 'node.view'
 bbb.meeting.redirect.moderate:
-  path: 'node/{node}/meeting/moderate'
+  path: 'node/{node}/redirect/moderate'
   defaults:
     _controller: '\Drupal\bbb\Controller\BBBMeetingTypeController::redirect'
     mode: 3
