@@ -40,10 +40,8 @@ class BBBMeetingAttendeeAccessCheck implements AccessCheckInterface {
   /**
    * {@inheritdoc}
    */
-  public function access(Route $route, Request $request, AccountInterface $account, $node) {
-    if (is_numeric($node)) {
-      $node = node_load($node);
-    }
+  public function access(Route $route, Request $request, AccountInterface $account) {
+    $node = $request->attributes->get('node');;
 
     if (!bbb_is_meeting_type($node->getType())) {
       return self::KILL;
