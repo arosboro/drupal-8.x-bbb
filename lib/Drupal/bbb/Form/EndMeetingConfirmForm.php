@@ -29,15 +29,15 @@ class EndMeetingConfirmForm extends ConfigFormBase {
    */
   public function buildForm(array $form, array &$form_state) {
     $node = node_load(arg(1));
-    $form['bbb_confirm_meeting_end'] = confirm_form(
+    $form = confirm_form(
       array(
         'nid' => array(
           '#type' => 'value',
           '#value' => $node->id(),
         ),
       ),
-      t('Are you sure you want to terminate the meeting !name?', array('!name' => $node->getTitle())),
-        'node/' . $node->id(),
+      t('Are you sure you want to terminate the meeting !name?', array('!name' => l($node->getTitle())),
+        'node/' . $node->id()),
       t('This action cannot be undone, all attendes will be removed from the meeting.'),
       t('Terminate'),
       t('Cancel')
