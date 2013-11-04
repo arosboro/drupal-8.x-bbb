@@ -141,4 +141,19 @@ class BBBMeetingTypeController {
         break;
     }
   }
+
+  /**
+   * Return meeting status; Menu callback
+   * @param $node
+   *   EntityInterface node
+   *
+   * @return JsonResponse with boolean 'running'
+   */
+  public function status($node) {
+    if (is_numeric($node)) {
+      $node = node_load($node);
+    }
+    $meeting = bbb_get_meeting($node->id());
+    return new JsonResponse(array('running' => $meeting->running));
+  }
 }

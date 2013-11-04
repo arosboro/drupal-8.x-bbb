@@ -109,10 +109,6 @@ function bbb_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['node/%node/meeting/status'] = array(
-    //'page callback' => 'bbb_status',
-    //'page arguments' => array(1),
-    //'access callback' => 'bbb_access_attendee',
-    //'access arguments' => array(1),
     'type' => MENU_CALLBACK,
     //'file' => 'includes/api.bbb.inc',
   );
@@ -550,14 +546,6 @@ function bbb_delete_meeting($nid) {
 }
 
 /* Menu Callbacks */
-
-/**
- * Return meeting status; Menu callback
- */
-function bbb_status($node) {
-  $meeting = bbb_get_meeting($node->id());
-  return new JsonResponse(array('running' => $meeting->running));
-}
 
 /**
  * Redirect to big blue button instance; Menu callback

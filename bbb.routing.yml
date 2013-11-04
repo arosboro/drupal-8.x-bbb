@@ -73,3 +73,12 @@ bbb.meeting.end_meeting_confirm_form:
   requirements:
     _bbb_meeting_moderator_access_check: 'TRUE'
     _entity_access: 'node.view'
+bbb.meeting.status:
+  path: 'node/{node}/meeting/status'
+  defaults:
+    _controller: '\Drupal\bbb\Controller\BBBMeetingTypeController::status'
+  options:
+    _access_mode: 'ALL'
+  requirements:
+    _bbb_meeting_attendee_access_check: 'TRUE'
+    _entity_access: 'node.view'
