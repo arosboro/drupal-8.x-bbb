@@ -90,14 +90,13 @@ class SettingsForm extends ConfigFormBase {
       '#value' => t('Test Connection'),
     );
 
-    /*
-    if (bbb_test_connection($form['bbb_server']['base_url']['#default_value'])) {
+
+    if ($this->test_connection($form['bbb_server']['base_url']['#default_value'])) {
       drupal_set_message(t('The connection has been established succesfully. Please save your settings now.'), 'status', FALSE);
     }
     else {
       drupal_set_message(t('The connection could not be established. Please adjust your settings.'), 'error');
     }
-    */
 
     return parent::buildForm($form, $form_state);
   }
@@ -121,5 +120,24 @@ class SettingsForm extends ConfigFormBase {
         ->save();
 
     parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * Test connection to Big Blue Button
+   */
+  public function test_connection($url) {
+    try {
+      $request = \Drupal::service('http_default_client')
+        ->get($url);
+      $response = $request->send()
+        ->getBody(TRUE);
+    }
+    catch (RequestException $e) {
+      return FALSE;
+    }
+    if ($response->code == 200 || $response->code == 302) {
+      return TRUE;
+    }
+    return FALSE;
   }
 }
