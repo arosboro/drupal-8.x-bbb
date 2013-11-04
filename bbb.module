@@ -141,6 +141,11 @@ function bbb_menu() {
     'route_name' => 'bbb.admin',
     'type' => MENU_NORMAL_ITEM,
   );
+  $items['admin/structure/bigbluebutton'] = array(
+    'title' => 'BBB Content Type',
+    'description' => 'Content Types Configured to be used with Big Blue Button',
+    'route_name' => 'bbb.node_type.list',
+  );
 
   return $items;
 }
@@ -197,7 +202,23 @@ function bbb_access_record($node) {
 function bbb_form_alter(&$form, &$form_state, $form_id) {
   // Node type settings form
   if ($form_id == 'node_type_edit_form') {
-    $form['bbb'] = \Drupal::formBuilder()->getForm('bbb_content_type');
+    $manager = \Drupal::entityManager();
+    $node_type = node_type_load(arg(4));
+    $id = $node_type->type;
+    $label = $node_type->name;
+    $entity = entity_load('bbb_node_type', $id);
+    if (!$entity) {
+      $entity = entity_create('bbb_node_type', array('id' => $id, 'label' => $label));
+    }
+    $bbb_form = $manager->getForm($entity, 'edit');
+    $form['bbb'] = $bbb_form['bbb'];
+    $form['#submit'][] = array_pop($bbb_form['#submit']);
+    $validate = array_merge($form['actions']['submit']['#validate'], $bbb_form['actions']['submit']['#validate']);
+    $submit = array_merge($form['actions']['submit']['#submit'], $bbb_form['actions']['submit']['#submit']);
+    $form['actions']['submit']['#validate'] = $validate;
+    $form['actions']['submit']['#submit'] = $submit;
+    // TODO handle delete action for BBBContentType 
+    //$form['actions']['delete']['#submit'] = array_merge($form['actions']['delete']['#submit'], $bbb_form['actions']['delete']['#submit']);
   }
 
   // Node edit form

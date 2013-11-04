@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\bbb\BBBContentTypeInterface.
+ * Contains \Drupal\bbb\BBBNodeTypeInterface.
  */
 
 namespace Drupal\bbb;
@@ -11,7 +11,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 /**
  * Provides an interface defining a Foo Bar entity.
  */
-interface BBBContentTypeInterface extends ConfigEntityInterface {
+interface BBBNodeTypeInterface extends ConfigEntityInterface {
 
   public function active();
 

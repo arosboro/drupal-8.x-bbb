@@ -4,12 +4,25 @@ bbb.admin:
     _form: '\Drupal\bbb\Form\SettingsForm'
     _title: 'Big Blue Button meetings'
   requirements:
-    _permission: 'administer big blue button'
-
-bbb.content_type_form:
-  path: '/bbb_content_type_form/{node_type}'
+    _permission: 'administer big blue button'    
+bbb.node_type.list:
+  path: '/admin/structure/bigbluebutton'
   defaults:
-    _form: 'bbb.content_type.edit'
+    _entity_list: bbb_node_type
+    _title: 'BBB Content Type Settings'
+  requirements:
+    _permission: 'administer big blue button'
+bbb.node_type.add:
+  path: '/admin/structure/bigbluebutton/add'
+  defaults:
+    _entity_form: bbb_node_type.add
+    _title: 'BBB Content Type Settings'
+  requirements:
+    _permission: 'administer big blue button'
+bbb.node_type.edit:
+  path: '/admin/structure/bigbluebutton/{bbb_node_type}'
+  defaults:
+    _entity_form: bbb_node_type.edit
     _title: 'BBB Content Type Settings'
   requirements:
     _permission: 'administer big blue button'

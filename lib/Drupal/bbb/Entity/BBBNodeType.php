@@ -1,51 +1,55 @@
 <?php
 /**
  * @file
- * Contains Drupal\bbb\Plugin\Core\Entity\BBBContentType.
+ * Contains Drupal\bbb\Plugin\Core\Entity\BBBNodeType.
  */
 
 namespace Drupal\bbb\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\bbb\BBBContentTypeInterface;
+use Drupal\bbb\BBBNodeTypeInterface;
 
 /**
- * Defines the BBBContentType entity.
+ * Defines the BBBNodeType entity.
  *
  *  @EntityType(
- *    id = "bbb_content_type",
+ *    id = "bbb_node_type",
  *    label = @Translation("Big Blue Button Content Type"),
  *    module = "bbb",
  *    controllers = {
  *      "storage" = "Drupal\Core\Config\Entity\ConfigStorageController",
+ *      "list" = "Drupal\bbb\Controller\BBBNodeTypeListController",
  *      "form" = {
- *        "edit" = "Drupal\bbb\Form\BBBContentTypeFormController"
+ *        "add" = "Drupal\bbb\Form\BBBNodeTypeFormController",
+ *        "edit" = "Drupal\bbb\Form\BBBNodeTypeFormController"
  *      }
  *    },
- *    config_prefix = "bbb.content_type",
- *    admin_permission = "administer big blue button"
+ *    config_prefix = "bbb.node_type",
+ *    admin_permission = "administer big blue button",
  *    entity_keys = {
- *      "id" = "id"
- *      "label" = "label"
+ *      "id" = "id",
+ *      "label" = "label",
  *      "uuid" = "uuid"
+ *   },
+ *   links = {
+ *     "edit-form" = "admin/structure/bigbluebutton/{bbb_node_type}"
  *   }
  * )
  */
-class BBBContentType extends ConfigEntityBase implements BBBContentTypeInterface {
+class BBBNodeType extends ConfigEntityBase implements BBBNodeTypeInterface {
   public $id;
   public $uuid;
   public $label;
-
-  private $active;
-  private $showLinks;
-  private $showStatus;
-  private $moderatorRequired;
-  private $welcome;
-  private $dialNumber;
-  private $moderatorPW;
-  private $attendeePW;
-  private $logoutURL;
-  private $record;
+  public $active;
+  public $showLinks;
+  public $showStatus;
+  public $moderatorRequired;
+  public $welcome;
+  public $dialNumber;
+  public $moderatorPW;
+  public $attendeePW;
+  public $logoutURL;
+  public $record;
 
   public function active() {
     return $this->active;
@@ -108,7 +112,7 @@ class BBBContentType extends ConfigEntityBase implements BBBContentTypeInterface
   }
 
   public function setAttendeePW($value) {
-    $this->attendePW = $value;
+    $this->attendeePW = $value;
   }
 
   public function logoutURL() {
@@ -120,7 +124,7 @@ class BBBContentType extends ConfigEntityBase implements BBBContentTypeInterface
   }
 
   public function record() {
-    return $this->record();
+    return $this->record;
   }
 
   public function setRecord($value) {
