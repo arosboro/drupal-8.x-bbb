@@ -463,9 +463,7 @@ function bbb_is_meeting_owner($nid, $account = NULL) {
  * Check if node type is meeting
  */
 function bbb_is_meeting_type($type) {
-  return FALSE;
-  //\Drupal::config("node.content_type.$type")->get('active');
-  //variable_get('bbb_content_type_' . $type, FALSE);
+  return \Drupal::config("node.node_type.$type")->get('active');
 }
 
 /**
