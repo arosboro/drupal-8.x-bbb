@@ -64,3 +64,12 @@ bbb.meeting.redirect.moderate:
   requirements:
     _bbb_meeting_moderator_access_check: 'TRUE'
     _entity_access: 'node.view'
+bbb.meeting.end_meeting_confirm_form:
+  path: 'node/{node}/meeting/end-confirm'
+  defaults:
+    _form: '\Drupal\bbb\Form\EndMeetingConfirmForm'
+  options:
+    _access_mode: 'ALL'
+  requirements:
+    _bbb_meeting_moderator_access_check: 'TRUE'
+    _entity_access: 'node.view'
