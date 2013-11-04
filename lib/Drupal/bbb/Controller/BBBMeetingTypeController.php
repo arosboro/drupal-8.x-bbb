@@ -15,7 +15,7 @@ class BBBMeetingTypeController {
    * Redirect to big blue button instance; Menu callback
    *
    * @param EntityInterface $node
-   *   A Drupal node object
+   *   A Drupal node Interface
    *
    * @return Drupal render array
    */
@@ -62,6 +62,52 @@ class BBBMeetingTypeController {
           bbb_redirect($node, $mode);
         }
       }
+    }
+    $variables = array(
+      'meeting' => $meeting,
+      'mode' => $mode,
+      'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
+      'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
+    );
+    return theme('bbb_meeting', $variables);
+  }
+
+  /**
+   * Redirect to big blue button instance; Menu callback
+   *
+   * @param EntityInterface $node
+   *   A Drupal node Interface
+   *
+   * @return Drupal render array
+   */
+  public function moderate($node) {
+    if (is_numeric($node)) {
+      $node = node_load($node);
+    }
+    $mode = 'moderate';
+    $meeting = bbb_get_meeting($node->id());
+
+    $params = array(
+      'meetingID' => $meeting->meetingID,
+      'password' => $meeting->moderatorPW,
+    );
+
+    $status = bbb_api_getMeetingInfo($params);
+    if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
+      drupal_set_message('The meeting has been terminated and is not available for reopening.');
+      return new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
+    }
+
+    drupal_set_title($node->getTitle());
+    // Implicitly create meeting
+    if (empty($meeting->initialized)) {
+      if ($data = bbb_create_meeting($node, (array) $params)) {
+        // Update local data
+        bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
+      }
+    }
+    if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
+      bbb_redirect($node, $mode);
     }
     $variables = array(
       'meeting' => $meeting,

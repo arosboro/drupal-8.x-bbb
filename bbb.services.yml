@@ -4,3 +4,8 @@ services:
     arguments: ['@current_user']
     tags:
       - { name: access_check }
+  bbb.meeting.moderator_access_check:
+    class: Drupal\bbb\Access\BBBMeetingModeratorAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check }

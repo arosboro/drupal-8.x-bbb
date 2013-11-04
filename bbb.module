@@ -97,10 +97,7 @@ function bbb_menu() {
   );
   $items['node/%node/meeting/moderate'] = array(
     'title' => 'Moderate Meeting',
-    //'page callback' => 'bbb_meeting_moderate',
-    //'page arguments' => array(1),
-    //'access callback' => 'bbb_access_moderator',
-    //'access arguments' => array(1),
+    'route_name' => 'bbb.meeting.moderate',
     'type' => $show_local_tasks ? MENU_LOCAL_TASK : MENU_CALLBACK,
     'weight' => 2,
   );
@@ -149,22 +146,6 @@ function bbb_menu() {
   );
 
   return $items;
-}
-
-/**
- * Check moderation access permissions; Menu access callback
- */
-function bbb_access_moderator($node) {
-  global $user;
-  if (!bbb_is_meeting_type($node->getType())) {
-    return FALSE;
-  }
-
-  // Check for node access and access start meetings
-  if (node_access('view', $node) && ((user_access('moderate meetings') || user_access('administer big blue button')) || $user->uid == $node->uid && user_access('moderate own meetings'))) {
-    return TRUE;
-  }
-  return FALSE;
 }
 
 /**
@@ -351,6 +332,7 @@ function bbb_node_view(\Drupal\Core\Entity\EntityInterface $node, \Drupal\entity
   }
 
   // Add links to content.
+  global $user;
   $links = array();
   $show = $BBBNodeTypeConfig->get('showLinks');
   if ($view_mode != 'teaser' && $show) {
@@ -599,40 +581,7 @@ function bbb_status($node) {
  *   A Drupal node object
  */
 function bbb_meeting_moderate($node) {
-  global $user;
-  $url = array();
-  $mode = 'moderate';
-  $meeting = bbb_get_meeting($node->id());
 
-  $params = array(
-    'meetingID' => $meeting->meetingID,
-    'password' => $meeting->moderatorPW,
-  );
-
-  $status = bbb_api_getMeetingInfo($params);
-  if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
-    drupal_set_message('The meeting has been terminated and is not available for reopening.');
-    return new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
-  }
-
-  drupal_set_title($node->getTitle());
-  // Implicitly create meeting
-  if (empty($meeting->initialized)) {
-    if ($data = bbb_create_meeting($node, (array) $params)) {
-      // Update local data
-      bbb_update_meeting($node, array_merge((array) $meeting, (array) $data));
-    }
-  }
-  if (BIGBLUEBUTTON_DISPLAY_MODE == 'blank') {
-    bbb_redirect($node, $mode);
-  }
-  $variables = array(
-    'meeting' => $meeting,
-    'mode' => $mode,
-    'height' => BIGBLUEBUTTON_DISPLAY_HEIGHT,
-    'width' => BIGBLUEBUTTON_DISPLAY_WIDTH
-  );
-  return theme('bbb_meeting', $variables);
 }
 
 /**
