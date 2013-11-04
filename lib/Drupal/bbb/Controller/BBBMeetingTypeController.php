@@ -117,4 +117,28 @@ class BBBMeetingTypeController {
     );
     return theme('bbb_meeting', $variables);
   }
+
+  /**
+   * Redirect to meeting
+   */
+  public function redirect($node, $mode = 'attend') {
+    if (is_numeric($node)) {
+      $node = node_load($node);
+    }
+    $meeting = bbb_get_meeting($node->id(), NULL, FALSE);
+    switch ($mode) {
+      case 'attend':
+        // Get redirect URL
+        $url = parse_url($meeting->url[$mode]);
+        $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
+        header('Location: ' . $fullurl, TRUE, 301);
+        break;
+      case 'moderate':
+        // Get redirect URL
+        $url = parse_url($meeting->url[$mode]);
+        $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
+        header('Location: ' . $fullurl, TRUE, 301);
+        break;
+    }
+  }
 }

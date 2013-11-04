@@ -110,17 +110,9 @@ function bbb_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['node/%node/redirect/attend'] = array(
-    //'page callback' => 'bbb_redirect',
-    //'page arguments' => array(1, 3),
-    //'access callback' => 'bbb_access_attendee',
-    //'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
   $items['node/%node/redirect/moderate'] = array(
-    //'page callback' => 'bbb_redirect',
-    //'page arguments' => array(1, 3),
-    //'access callback' => 'bbb_access_moderator',
-    //'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
   $items['node/%node/meeting/status'] = array(
@@ -575,16 +567,6 @@ function bbb_status($node) {
 }
 
 /**
- * Redirect to big blue button instance; Menu callback
- *
- * @param OBJECT $node
- *   A Drupal node object
- */
-function bbb_meeting_moderate($node) {
-
-}
-
-/**
  * Terminate confirm form
  */
 function bbb_end_confirm_form($form, &$form_state) {
@@ -630,27 +612,6 @@ function bbb_meeting_end($node) {
   );
   $request = bbb_api_endMeeting($params);
   return $request;
-}
-
-/**
- * Redirect to meeting
- */
-function bbb_redirect($node, $mode = 'attend') {
-  $meeting = bbb_get_meeting($node->id(), NULL, FALSE);
-  switch ($mode) {
-    case 'attend':
-      // Get redirect URL
-      $url = parse_url($meeting->url[$mode]);
-      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-      header('Location: ' . $fullurl, TRUE, 301);
-      break;
-    case 'moderate':
-      // Get redirect URL
-      $url = parse_url($meeting->url[$mode]);
-      $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-      header('Location: ' . $fullurl, TRUE, 301);
-      break;
-  }
 }
 
 function bbb_encode_int($string) {
