@@ -26,3 +26,8 @@ bbb.node_type.edit:
     _title: 'BBB Content Type Settings'
   requirements:
     _permission: 'administer big blue button'
+bbb.meeting.attend:
+  path: 'node/{node_type}/meeting/attend'
+  defaults:
+    _content: '\Drupal\bbb\Controller\BBBMeetingController'
+  requirements:
