@@ -29,7 +29,7 @@ bbb.node_type.edit:
 bbb.meeting.attend:
   path: 'node/{node}/meeting/attend'
   defaults:
-    _content: '\Drupal\bbb\Controller\BBBMeetingController::attend'
+    _content: '\Drupal\bbb\Controller\BBBMeetingTypeController::attend'
   options:
     _access_mode: 'ALL'
   requirements:

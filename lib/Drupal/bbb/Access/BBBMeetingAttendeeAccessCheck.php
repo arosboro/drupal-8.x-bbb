@@ -41,17 +41,16 @@ class BBBMeetingAttendeeAccessCheck implements AccessCheckInterface {
    * {@inheritdoc}
    */
   public function access(Route $route, Request $request, AccountInterface $account, $node) {
-    dpm($route, 'Route');
-    dpm($request, 'Request');
-    dpm($account, 'AccountInterface');
-    dpm($node, 'NodeTypeInterface???');
+    if (is_numeric($node)) {
+      $node = node_load($node);
+    }
+
     if (!bbb_is_meeting_type($node->getType())) {
       return self::KILL;
     }
 
-    // Check for node access and access to attend meetings
-    if (node_access('view', $node, $this->account) &&
-        $this->account->hasPermission('attend meetings') || $this->account->hasPermission('administer big blue button')) {
+    // Check for access to attend meetings
+    if ($this->account->hasPermission('attend meetings') || $this->account->hasPermission('administer big blue button')) {
       return self::ALLOW;
     }
     return self::DENY;

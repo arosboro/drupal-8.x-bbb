@@ -5,7 +5,9 @@
  */
 namespace Drupal\bbb\Controller;
 
+use Drupal\Component\Utility\Json;
 use Symfony\Component\HttpFoundation;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BBBMeetingTypeController {
 
@@ -17,7 +19,10 @@ class BBBMeetingTypeController {
    *
    * @return Drupal render array
    */
-  public function attend(EntityInterface $node) {
+  public function attend($node) {
+    if (is_numeric($node)) {
+      $node = node_load($node);
+    }
     $node_type = $node->getType();
     $BBBNodeTypeConfig = \Drupal::config("bbb.node_type.$node_type");
     $mode = 'attend';
@@ -44,7 +49,7 @@ class BBBMeetingTypeController {
         drupal_add_js('var bbb_check_status_url = ' . Json::encode(url('node/' . $node->id() . '/meeting/status')), 'inline');
         drupal_add_js(drupal_get_path('module', 'bbb') . '/js/check_status.bbb.js');
         drupal_set_message(t('You signed up for this meeting. Please stay on this page, you will be redirected immediately after the meeting has started.'));
-        return node_show($node, NULL);
+        return node_view($node, NULL);
       }
       else {
         if (empty($meeting->initialized)) {
