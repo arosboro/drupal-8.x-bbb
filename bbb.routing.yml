@@ -48,7 +48,7 @@ bbb.meeting.redirect.attend:
   path: 'node/{node}/redirect/attend'
   defaults:
     _controller: '\Drupal\bbb\Controller\BBBMeetingTypeController::redirect'
-    mode: 3
+    mode: 'attend'
   options:
     _access_mode: 'ALL'
   requirements:
@@ -58,7 +58,7 @@ bbb.meeting.redirect.moderate:
   path: 'node/{node}/redirect/moderate'
   defaults:
     _controller: '\Drupal\bbb\Controller\BBBMeetingTypeController::redirect'
-    mode: 3
+    mode: 'moderate'
   options:
     _access_mode: 'ALL'
   requirements:

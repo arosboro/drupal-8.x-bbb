@@ -6,7 +6,7 @@
 namespace Drupal\bbb\Controller;
 
 use Drupal\Component\Utility\Json;
-use Symfony\Component\HttpFoundation;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BBBMeetingTypeController {
@@ -35,7 +35,8 @@ class BBBMeetingTypeController {
     $status = bbb_api_getMeetingInfo($params);
     if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
       drupal_set_message('The meeting has been terminated and is not available for attending.');
-      return new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
+      $response = new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
+      return $response->send();
     }
 
     drupal_set_title($node->getTitle());
@@ -95,7 +96,8 @@ class BBBMeetingTypeController {
     $status = bbb_api_getMeetingInfo($params);
     if ($status && property_exists($status, 'hasBeenForciblyEnded') && $status->hasBeenForciblyEnded == 'true') {
       drupal_set_message('The meeting has been terminated and is not available for reopening.');
-      return new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
+      $response = new RedirectResponse(url('node/' . $node->id(), array('absolute' => TRUE)));
+      return $response->send();
     }
 
     drupal_set_title($node->getTitle());
@@ -131,13 +133,15 @@ class BBBMeetingTypeController {
         // Get redirect URL
         $url = parse_url($meeting->url[$mode]);
         $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-        header('Location: ' . $fullurl, TRUE, 301);
+        $response = new RedirectResponse($fullurl, 301, array());
+        $response->send();
         break;
       case 'moderate':
         // Get redirect URL
         $url = parse_url($meeting->url[$mode]);
         $fullurl = $url['scheme'] . '://' . $url['host'] . (isset($url['port']) ? ':' . $url['port'] : '' ) . $url['path'] . '?' . $url['query'];
-        header('Location: ' . $fullurl, TRUE, 301);
+        $response = new RedirectResponse($fullurl, 301, array());
+        $response->send();
         break;
     }
   }

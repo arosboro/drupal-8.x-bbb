@@ -286,7 +286,7 @@ function bbb_node_update($node) {
   if (!bbb_is_meeting_type($node->getType())) {
     return;
   }
-  bbb_update_meeting($node, $node->bbb);
+  bbb_update_meeting($node, (array) $node->bbb);
 }
 
 /**
