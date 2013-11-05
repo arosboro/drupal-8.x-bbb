@@ -114,14 +114,14 @@ function bbb_menu() {
   );
 
   $items['admin/config/media/bigbluebutton'] = array(
-    'title' => 'Big Blue Button meetings',
+    'title' => 'BigBlueButton meetings',
     'description' => 'Default server and meeting settings.',
     'route_name' => 'bbb.admin',
     'type' => MENU_NORMAL_ITEM,
   );
   $items['admin/structure/bigbluebutton'] = array(
-    'title' => 'BBB Content Type',
-    'description' => 'Content Types Configured to be used with Big Blue Button',
+    'title' => 'BigBlueButton content types',
+    'description' => 'Content Types configured to be used with Big Blue Button',
     'route_name' => 'bbb.node_type.list',
     'type' => MENU_NORMAL_ITEM,
   );
