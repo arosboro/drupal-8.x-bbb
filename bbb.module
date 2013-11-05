@@ -244,7 +244,7 @@ function bbb_form_node_form_alter(&$form, &$form_state, $form_id) {
     }
     if (user_access('record meetings') && empty($form['bbb']['record'])) {
       // this clause is for users who have the record meetings permission but no permissions to "administer BBB"
-    $form['bbb'] = array(
+      $form['bbb'] = array(
         '#title' => t('Recording settings'),
         '#type' => 'details',
         '#description' => t("The following settings may be changed until the meeting first starts."),
@@ -325,14 +325,14 @@ function bbb_node_view(\Drupal\Core\Entity\EntityInterface $node, \Drupal\entity
       );
     }
     if ((user_access('moderate meetings') || user_access('administer big blue button')) ||
-        $user->uid == $node->getAuthor()->id() && user_access('moderate own meetings')) {
+        $user->id() == $node->getAuthor()->id() && user_access('moderate own meetings')) {
       $links['meeting_moderate'] = array(
         'title' => t('Moderate meeting'),
         'href' => 'node/' . $node->id() . '/meeting/moderate',
       );
     }
     if ((user_access('moderate meetings') || user_access('administer big blue button')) ||
-        $user->uid == $node->getAuthor()->id() && user_access('moderate own meetings') &&
+        $user->id() == $node->getAuthor()->id() && user_access('moderate own meetings') &&
         $meeting->running) {
       $links['meeting_end'] = array(
         'title' => t('Terminate meeting'),
@@ -409,7 +409,6 @@ function bbb_is_meeting_owner($nid, $account = NULL) {
            WHERE n.uid = :uid
              AND nid = :nid";
   $owner = db_query($sql, array(':uid' => $account->uid, ':nid' => $nid));
-  dpm($owner, 'bbb_is_meeting_owner');
   return $owner ? TRUE : FALSE;
 }
 

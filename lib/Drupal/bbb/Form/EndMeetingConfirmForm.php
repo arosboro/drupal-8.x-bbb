@@ -43,7 +43,7 @@ class EndMeetingConfirmForm extends ConfigFormBase {
       t('Cancel')
     );
 
-    return parent::buildForm($form, $form_state);
+    return $form;
   }
 
   /**
