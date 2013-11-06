@@ -21,7 +21,8 @@ use Drupal\bbb\BBBNodeTypeInterface;
  *      "list" = "Drupal\bbb\Controller\BBBNodeTypeListController",
  *      "form" = {
  *        "add" = "Drupal\bbb\Form\BBBNodeTypeFormController",
- *        "edit" = "Drupal\bbb\Form\BBBNodeTypeFormController"
+ *        "edit" = "Drupal\bbb\Form\BBBNodeTypeFormController",
+ *        "delete" = "Drupal\bbb\Form\BBBNodeTypeDeleteForm"
  *      }
  *    },
  *    config_prefix = "bbb.node_type",
@@ -50,6 +51,19 @@ class BBBNodeType extends ConfigEntityBase implements BBBNodeTypeInterface {
   public $attendeePW;
   public $logoutURL;
   public $record;
+
+  public function setId($value) {
+    $BBBNodeType = entity_load('bbb_node_type', $value);
+    if (empty($config)) {
+      $this->id = $value;
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  public function setLabel($value) {
+    $this->label = $value;
+  }
 
   public function active() {
     return $this->active;

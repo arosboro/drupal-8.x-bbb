@@ -29,6 +29,30 @@ class BBBNodeTypeFormController extends EntityFormController {
     $form = parent::form($form, $form_state);
     $bbbNodeType = $this->entity;
 
+    if ($bbbNodeType->isNew()) {
+      $names = node_type_get_names();
+      $options = array();
+      foreach ($names as $type => $label) {
+        if (!bbb_is_meeting_type($type)) {
+          $options[$type] = $label;
+        }
+      }
+      $form['node'] = array(
+        '#title' => t('Available content types'),
+        '#type' => 'fieldset',
+        '#tree' => FALSE,
+        '#collapsible' => FALSE,
+        '#collapsed' => FALSE,
+        '#weight' => 0,
+      );
+
+      $form['node']['type'] = array(
+        '#title' => t('Content types'),
+        '#type' => 'select',
+        '#options' => $options,
+      );
+    }
+
     $form['bbb'] = array(
       '#title' => t('Big Blue Button settings'),
       '#type' => 'details',
@@ -142,17 +166,33 @@ class BBBNodeTypeFormController extends EntityFormController {
    */
   public function save(array $form, array &$form_state) {
     $bbbNodeType = $this->entity;
+    $id = isset($form_state['values']['type']) ? $form_state['values']['type'] : FALSE;
     $values = $form_state['values']['bbb'];
-    $bbbNodeType->setActive($values['active']);
-    $bbbNodeType->setShowLinks($values['showLinks']);
-    $bbbNodeType->setShowStatus($values['showStatus']);
-    $bbbNodeType->setModeratorRequired($values['moderatorRequired']);
-    $bbbNodeType->setWelcome($values['welcome']);
-    $bbbNodeType->setDialNumber($values['dialNumber']);
-    $bbbNodeType->setModeratorPW($values['moderatorPW']);
-    $bbbNodeType->setAttendeePW($values['attendeePW']);
-    $bbbNodeType->setLogoutURL($values['logoutURL']);
-    $bbbNodeType->setRecord($values['record']);
-    $status = $bbbNodeType->save();
+    // If there are some values that are not empty.
+    if (count(array_filter($values)) || !$bbbNodeType->isNew()) {
+      $bbbNodeType->setActive($values['active']);
+      $bbbNodeType->setShowLinks($values['showLinks']);
+      $bbbNodeType->setShowStatus($values['showStatus']);
+      $bbbNodeType->setModeratorRequired($values['moderatorRequired']);
+      $bbbNodeType->setWelcome($values['welcome']);
+      $bbbNodeType->setDialNumber($values['dialNumber']);
+      $bbbNodeType->setModeratorPW($values['moderatorPW']);
+      $bbbNodeType->setAttendeePW($values['attendeePW']);
+      $bbbNodeType->setLogoutURL($values['logoutURL']);
+      $bbbNodeType->setRecord($values['record']);
+      if (!empty($id)) {
+        $names = node_type_get_names();
+        $label = $names[$id];
+        $result = $bbbNodeType->setId($id);
+        if ($result) {
+          $bbbNodeType->setLabel($label);
+          if (arg(2) == 'bigbluebutton') {
+            $form_state['redirect'] = '/admin/structure/bigbluebutton';
+            drupal_set_message('BigBlueButton settings saved.');
+          }
+        }
+      }
+      $status = $bbbNodeType->save();
+    }
   }
 }

@@ -26,6 +26,13 @@ bbb.node_type.edit:
     _title: 'BigBlueButton content type settings'
   requirements:
     _permission: 'administer big blue button'
+bbb.node_type.delete:
+  path: '/admin/structure/bigbluebutton/{bbb_node_type}/delete'
+  defaults:
+    _entity_form: bbb_node_type.delete
+    _title: 'Remove BigBlueButton Content type settings'
+  requirements:
+    _permission: 'administer big blue button'
 bbb.meeting.attend:
   path: 'node/{node}/meeting/attend'
   defaults:

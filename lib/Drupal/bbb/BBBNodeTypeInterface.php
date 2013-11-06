@@ -13,6 +13,10 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  */
 interface BBBNodeTypeInterface extends ConfigEntityInterface {
 
+  public function setId($value);
+
+  public function setLabel($value);
+
   public function active();
 
   public function setActive($value);
